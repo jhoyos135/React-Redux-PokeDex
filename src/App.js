@@ -1,35 +1,25 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { connect } from 'react-redux'
 import Pokemon from './components/Pokemon';
 import Search from './components/search';
 import * as actions from './redux/actions/index'
 import './App.css';
 
-class App extends Component {
+const App = (props) => {
+  const { displayedPokemons, isFetched, error, filterPokemons, getPokemons } = props;
 
-  state = {
-    currentPage: 1,
-    pageNum: 9
-  };
+  const currentPage = 1;
+  const pageNum = 9;
+  // const [currentPage, newCurrentPage] = useState(1);
+  // const [pageNum, newPageNum] = useState(9);
 
-  handleClick = (e) =>{
-      this.setState({
-        currentPage: Number(e.target.id)
-      })
+  useEffect( () => {
+   getPokemons();  
+  }, []);
+
+ const handleSearch = (e) => {
+    filterPokemons(e.target.value);
   }
-
-  componentDidMount() {
-    this.props.getPokemons();   
-  }
-
-  handleSearch(e) {
-    this.props.filterPokemons(e.target.value);
-  }
-  render() {
-
-    const { displayedPokemons, isFetched, error } = this.props;
-    const {currentPage, pageNum} = this.state;
-
     const indexOfLastTodo = currentPage * pageNum;
     const indexOfFirstTodo = indexOfLastTodo - pageNum;
     const current = displayedPokemons.slice(indexOfFirstTodo, indexOfLastTodo);
@@ -41,7 +31,8 @@ class App extends Component {
     return (
       <div className="App">
         {error && <div> {error} </div>}
-        <Search onChange={this.handleSearch.bind(this)} />
+
+        <Search onChange={handleSearch} />
           
         {isFetched ? (
           <p> is loading...</p>
@@ -57,8 +48,8 @@ class App extends Component {
 
       </div>
     );
-  }
-}
+  
+};
 
 let mapStateToProps = (state) => {
   const {pokemons, displayedPokemons, isFetched, error } = state.pokemons;

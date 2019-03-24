@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 
-class Pokemon extends PureComponent {
-  render() {
-    const { pokemon } = this.props;
+const Pokemon = (props) => {
+  
+    const { pokemon } = props;
 
     return (
       <div className="single_poke">
@@ -10,7 +10,7 @@ class Pokemon extends PureComponent {
         <p className="poke_name">{pokemon.name}</p>
       </div>
     )
-  }
+  
 
 }
 export default Pokemon
